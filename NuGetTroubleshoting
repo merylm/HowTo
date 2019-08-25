@@ -1,0 +1,10 @@
+Some errors can be caused by caching problems
+Tools > Options > Nuget package manager > Clear all nuget caches
+Clear the contents of C:\Program Files\dotnet\sdk\NuGetFallbackFolder, then right-click solution > restore nuget packages
+
+Runtime error: Could not load file or assembly 'System.IdentityModel.Tokens.Jwt, Version=5.1.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35' or one of its dependencies. The system cannot find the file specified
+This happened because I had a .NET Framework project that calls a .NET Standard project with a nuget package
+e.g. WebProject -> ClassLibrary -> AdminLibrary (.NET Standard) -> System.IdentityModel.Tokens.Jwt
+Add the nuget package to the .NET Framework projects as well
+  Add to both WebProject and ClassLibrary
+  Check that dependencies are also added
