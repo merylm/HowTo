@@ -1,0 +1,31 @@
+IIS > MyWebsite site > Security > SSL settings
+"The site does not have a secure binding (HTTPS) and cannot accept SSL connections"
+
+(https://docs.microsoft.com/en-us/iis/manage/configuring-security/how-to-set-up-ssl-on-iis):
+IIS > Server node > Server certificates > Actions pane > Create Self-Signed Certificate
+IIS > Default web site > Actions pane > Bindings > Add
+  Type = https, SSL certificate = the self-signed one created
+IIS > MyWebsite site > Actions pane > Browse *:443 (https)
+IIS > MyWebsite site > Security > SSL settings > Require SSL
+
+(http://www.thewindowsclub.com/manage-trusted-root-certificates-windows)
+(IIS > Server node > Server certificates > Actions pane > Export)
+Start > mmc > File > Add/remove Snap-in > Certificates > Computer account > Local computer
+mmc > Certificates > Right-click: Trusted Root Certification Authorities > All tasks > Import
+
+If the certificate is still not recognised
+  Postman > File > Settings > General > SSL certificate verification > OFF
+
+Fix for NET::ERR_CERT_COMMON_NAME_INVALID
+It's actually the Subject Alternative Name that's being validated
+mmc > Certificates > Personal > Certificates
+Find a certificate with a SAN e.g. "IIS Express Development Certificate" has SAN = "DNS name=localhost"
+Export this certificate from the Personal folder
+Import into the Trusted Root Certification Authorities folder
+IIS > Default web site > Bindings > add/edit https
+Change the SSL certificate to the one just imported
+
+To create a certificate and specify the a Subject Alternative Name
+See also https://superuser.com/questions/1385977/create-certificate-signing-request-csr-with-subject-alternative-name-san-on
+mmc > Certificates > Personal > All Tasks > Create certificate request
+OR mmc > Certificates > Personal > All Tasks > Advanced > Create custom request
